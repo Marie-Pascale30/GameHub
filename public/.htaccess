@@ -1,0 +1,12 @@
+Options -Indexes
+RewriteEngine On
+
+# Fichiers statiques servis directement, tout le reste passe par le front controller.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|svg)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+</IfModule>
