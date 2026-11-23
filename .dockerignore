@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.idea
+.vscode
+var/*.sqlite*
+tests/node_modules
+*.md
+!README.md
+Dockerfile
+.dockerignore

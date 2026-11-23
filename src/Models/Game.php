@@ -12,8 +12,8 @@ final class Game extends Model
 
     /** Tri : liste blanche, jamais de concaténation d'une saisie utilisateur. */
     public const SORTS = [
-        'populaire' => ['label' => 'Les plus populaires', 'sql' => 'COALESCE(f.fav_count, 0) DESC, r.avg_rating DESC, g.title ASC'],
-        'note'      => ['label' => 'Mieux notés',         'sql' => 'CASE WHEN r.avg_rating IS NULL THEN 1 ELSE 0 END, r.avg_rating DESC, COALESCE(r.review_count, 0) DESC, g.title ASC'],
+        'populaire' => ['label' => 'Popularité', 'sql' => 'COALESCE(f.fav_count, 0) DESC, r.avg_rating DESC, g.title ASC'],
+        'note'      => ['label' => 'Mieux notés', 'sql' => 'CASE WHEN r.avg_rating IS NULL THEN 1 ELSE 0 END, r.avg_rating DESC, COALESCE(r.review_count, 0) DESC, g.title ASC'],
         'recent'    => ['label' => 'Plus récents',        'sql' => 'g.release_year DESC, g.title ASC'],
         'ancien'    => ['label' => 'Plus anciens',        'sql' => 'g.release_year ASC, g.title ASC'],
         'titre'     => ['label' => 'Titre (A → Z)',       'sql' => 'g.title ASC'],

@@ -1,0 +1,13 @@
+# Base de données locale et environnement
+/var/*
+!/var/.gitkeep
+.env
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Outils de test
+node_modules/
