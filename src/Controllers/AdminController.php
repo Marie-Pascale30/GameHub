@@ -98,7 +98,7 @@ final class AdminController extends Controller
         $this->render('admin/form', [
             'title'     => $game ? 'Modifier « ' . $game['title'] . ' »' : 'Ajouter un jeu',
             'game'      => $game,
-            'data'      => $data,
+            'form'      => $data,
             'errors'    => $errors,
             'genres'    => $games->genres(),
             'platforms' => $games->platforms(),
