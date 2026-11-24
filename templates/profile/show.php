@@ -111,5 +111,19 @@ $maxGenre = $genres ? max(array_map(static fn ($g) => (int) $g['n'], $genres)) :
             </form>
         </section>
     </div>
+
+    <section class="panel danger-zone" id="supprimer-compte" aria-labelledby="supprimer-compte-titre">
+        <h2 class="panel__title" id="supprimer-compte-titre"><?= icon('trash') ?> Supprimer mon compte</h2>
+        <p class="muted">La suppression est immédiate et définitive : votre compte, vos coups de cœur, vos notes et vos avis seront effacés.</p>
+        <form method="post" action="/compte/supprimer" class="form danger-zone__form" data-confirm="Supprimer définitivement votre compte et toutes vos données ?" novalidate>
+            <?= csrf_field() ?>
+            <label class="field<?= isset($errors['delete_password']) ? ' field--error' : '' ?>">
+                <span class="field__label">Confirmez avec votre mot de passe</span>
+                <input type="password" name="delete_password" autocomplete="current-password" required>
+                <?php if (isset($errors['delete_password'])): ?><span class="field__error"><?= e($errors['delete_password']) ?></span><?php endif; ?>
+            </label>
+            <button class="btn btn--danger" type="submit"><?= icon('trash') ?> Supprimer mon compte</button>
+        </form>
+    </section>
     <?php endif; ?>
 </section>

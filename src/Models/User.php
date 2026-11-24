@@ -70,6 +70,12 @@ final class User extends Model
         $this->run('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash($password, PASSWORD_DEFAULT), $id]);
     }
 
+    /** Coups de cœur, avis et jetons de réinitialisation suivent (ON DELETE CASCADE). */
+    public function delete(int $id): void
+    {
+        $this->run('DELETE FROM users WHERE id = ?', [$id]);
+    }
+
     public function stats(int $id): array
     {
         $row = $this->one(

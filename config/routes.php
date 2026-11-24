@@ -7,6 +7,7 @@ use App\Controllers\AuthController;
 use App\Controllers\CatalogController;
 use App\Controllers\FavoriteController;
 use App\Controllers\GameController;
+use App\Controllers\PageController;
 use App\Controllers\PasswordController;
 use App\Controllers\ProfileController;
 use App\Controllers\ReviewController;
@@ -16,6 +17,7 @@ return static function (Router $r): void {
     // Catalogue
     $r->get('/', [CatalogController::class, 'index']);
     $r->get('/jeu/{id}', [GameController::class, 'show']);
+    $r->get('/mentions-legales', [PageController::class, 'legal']);
 
     // Authentification
     $r->get('/connexion', [AuthController::class, 'showLogin']);
@@ -35,6 +37,7 @@ return static function (Router $r): void {
     $r->get('/profil', [ProfileController::class, 'show']);
     $r->post('/profil/pseudo', [ProfileController::class, 'updateUsername']);
     $r->post('/profil/mot-de-passe', [ProfileController::class, 'updatePassword']);
+    $r->post('/compte/supprimer', [ProfileController::class, 'destroy']);
 
     // API JSON (fetch)
     $r->get('/api/jeux', [CatalogController::class, 'api']);

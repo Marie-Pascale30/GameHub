@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\Controller;
+use App\Core\RateLimiter;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\Session;
@@ -90,5 +91,30 @@ final class ProfileController extends Controller
         Auth::login($users->find($user['id'])); // nouvel identifiant de session
         Session::flash('success', 'Mot de passe modifié avec succès.');
         Response::redirect('/profil');
+    }
+
+    /** Suppression de son propre compte (droit à l'effacement, RGPD art. 17). */
+    public function destroy(): void
+    {
+        $user = $this->requireAuth();
+        if (Auth::isDemo($user)) {
+            Session::flash('info', 'Ce compte de démonstration est partagé par tous les visiteurs : il ne peut pas être supprimé.');
+            Response::redirect('/profil');
+        }
+
+        $users = new User();
+        if (!password_verify(Request::password('delete_password'), (string) $users->passwordHash($user['id']))) {
+            $this->show(['delete_password' => 'Mot de passe incorrect : votre compte n’a pas été supprimé.'], [], 422);
+            return;
+        }
+
+        // ON DELETE CASCADE : coups de cœur, notes, avis et jetons de réinitialisation.
+        $users->delete($user['id']);
+        (new RateLimiter())->clear('login:email:' . $user['email']);
+
+        Auth::logout();
+        Session::start();
+        Session::flash('success', 'Votre compte et toutes les données associées (coups de cœur, notes, avis) ont été supprimés.');
+        Response::redirect('/');
     }
 }
