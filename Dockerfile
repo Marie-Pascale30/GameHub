@@ -20,9 +20,12 @@ COPY . .
 RUN mkdir -p var && chown -R www-data:www-data var
 
 # Render (offre gratuite) impose le port via la variable PORT.
+# APP_URL : URL publique, jamais déduite de l'en-tête Host. Sur Render, la variable
+# d'environnement du service la remplace (https://gamehub-ccj0.onrender.com).
 ENV PORT=8080 \
     APP_ENV=production \
     APP_DEMO=1 \
+    APP_URL=http://localhost:8080 \
     DB_DRIVER=sqlite \
     DB_PATH=/var/www/html/var/gamehub.sqlite
 EXPOSE 8080

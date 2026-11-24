@@ -137,16 +137,12 @@ final class Request
         return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : $remote;
     }
 
+    /**
+     * URL publique, toujours issue de la configuration (APP_URL) : l'en-tête Host est fourni
+     * par le client et n'est jamais utilisé pour construire un lien ou valider un Referer.
+     */
     public static function baseUrl(): string
     {
-        $configured = Config::get('url');
-        if ($configured !== '') {
-            return $configured;
-        }
-        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        if (!preg_match('/^[a-z0-9.\-]+(:\d+)?$/i', $host)) {
-            $host = 'localhost';
-        }
-        return (self::isHttps() ? 'https' : 'http') . '://' . $host;
+        return (string) Config::get('url');
     }
 }
