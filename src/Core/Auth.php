@@ -18,8 +18,11 @@ final class Auth
             $id = $_SESSION['user_id'] ?? null;
             if (is_int($id)) {
                 self::$user = (new User())->find($id);
-                if (self::$user === null) {
-                    unset($_SESSION['user_id']);
+                // Compte supprimé, ou mot de passe changé depuis une autre session : session révoquée.
+                if (self::$user === null
+                    || (int) self::$user['session_version'] !== ($_SESSION['session_version'] ?? -1)) {
+                    self::$user = null;
+                    unset($_SESSION['user_id'], $_SESSION['session_version']);
                 }
             }
         }
@@ -59,6 +62,7 @@ final class Auth
         Session::regenerate();
         Csrf::rotate();
         $_SESSION['user_id'] = (int) $user['id'];
+        $_SESSION['session_version'] = (int) ($user['session_version'] ?? 0);
         self::$user = $user;
         self::$resolved = true;
     }

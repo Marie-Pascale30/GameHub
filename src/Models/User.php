@@ -6,7 +6,7 @@ namespace App\Models;
 
 final class User extends Model
 {
-    private const COLUMNS = 'id, username, email, role, created_at';
+    private const COLUMNS = 'id, username, email, role, created_at, session_version';
 
     public function find(int $id): ?array
     {
@@ -16,7 +16,7 @@ final class User extends Model
     /** Inclut le hash : réservé à la vérification du mot de passe. */
     public function findWithHashByEmail(string $email): ?array
     {
-        return $this->one('SELECT id, username, email, role, created_at, password_hash FROM users WHERE email = ?', [mb_strtolower($email)]);
+        return $this->one('SELECT id, username, email, role, created_at, session_version, password_hash FROM users WHERE email = ?', [mb_strtolower($email)]);
     }
 
     public function findByEmail(string $email): ?array
@@ -60,7 +60,7 @@ final class User extends Model
     public function updatePassword(int $id, string $password): void
     {
         $this->run(
-            'UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?',
+            'UPDATE users SET password_hash = ?, updated_at = ?, session_version = session_version + 1 WHERE id = ?',
             [password_hash($password, PASSWORD_DEFAULT), $this->now(), $id]
         );
     }
