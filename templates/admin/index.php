@@ -11,6 +11,9 @@
 </section>
 
 <section class="container section">
+    <?php if (App\Core\Auth::isDemo()): ?>
+        <p class="alert alert--demo" role="note"><?= icon('info') ?><span><strong>Démo :</strong> ajoutez, modifiez ou supprimez des jeux librement. Le catalogue d’origine est restauré à chaque redémarrage du serveur, et l’application fonctionne même si le catalogue est vide.</span></p>
+    <?php endif; ?>
     <form class="admin-search" method="get" action="/admin/jeux" role="search">
         <label class="search search--sm">
             <?= icon('search') ?>

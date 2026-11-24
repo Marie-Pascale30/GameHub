@@ -778,3 +778,8 @@ progress::-moz-progress-bar { background: var(--grad); border-radius: 99px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Comptes de démonstration partagés */
+.alert--demo { margin-top: 24px; border-color: rgba(251, 191, 36, .6); background: color-mix(in srgb, var(--amber) 10%, var(--surface)); }
+.alert--demo > .icon { color: var(--amber); }
+.section > .alert--demo:first-child { margin: 0 0 18px; }

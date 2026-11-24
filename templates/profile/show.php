@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Auth;
 use App\Core\View;
 
 $maxGenre = $genres ? max(array_map(static fn ($g) => (int) $g['n'], $genres)) : 1;
@@ -66,6 +67,11 @@ $maxGenre = $genres ? max(array_map(static fn ($g) => (int) $g['n'], $genres)) :
         </section>
     </div>
 
+    <?php if (Auth::isDemo($user)): ?>
+    <div class="alert alert--demo" role="note" id="parametres"><?= icon('info') ?>
+        <span><strong>Compte de démonstration partagé.</strong> Son pseudo et son mot de passe ne peuvent pas être modifiés et il ne peut pas être supprimé, pour que chaque visiteur puisse l’utiliser. Créez votre propre compte pour tester ces fonctions.</span>
+    </div>
+    <?php else: ?>
     <div class="cols" id="parametres">
         <section class="panel">
             <h2 class="panel__title"><?= icon('user') ?> Modifier le pseudo</h2>
@@ -105,4 +111,5 @@ $maxGenre = $genres ? max(array_map(static fn ($g) => (int) $g['n'], $genres)) :
             </form>
         </section>
     </div>
+    <?php endif; ?>
 </section>

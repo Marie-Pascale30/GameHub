@@ -41,6 +41,18 @@ final class Auth
         return (self::user()['role'] ?? '') === 'admin';
     }
 
+    /** Compte de démonstration partagé publiquement (joueur@ / admin@gamehub.fr). */
+    public static function isDemo(?array $user = null): bool
+    {
+        $user ??= self::user();
+        return $user !== null && self::isDemoEmail((string) $user['email']);
+    }
+
+    public static function isDemoEmail(string $email): bool
+    {
+        return in_array(mb_strtolower($email), Config::demoEmails(), true);
+    }
+
     /** Connexion : nouvel identifiant de session + nouveau jeton CSRF. */
     public static function login(array $user): void
     {

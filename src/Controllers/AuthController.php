@@ -35,9 +35,12 @@ final class AuthController extends Controller
         $limiter = new RateLimiter();
         $emailKey = 'login:email:' . $email;
         $ipKey = 'login:ip:' . Request::ip();
+        // Comptes de démo : identifiants publics, donc pas de blocage par e-mail (sinon 5 essais faux
+        // suffiraient à les bloquer pour tout le monde). La limite par IP s'applique toujours.
+        $limitEmail = !Auth::isDemoEmail($email);
 
         $wait = max(
-            $limiter->availableIn($emailKey, self::MAX_PER_EMAIL, self::WINDOW),
+            $limitEmail ? $limiter->availableIn($emailKey, self::MAX_PER_EMAIL, self::WINDOW) : 0,
             $limiter->availableIn($ipKey, self::MAX_PER_IP, self::WINDOW)
         );
         if ($wait > 0) {
@@ -56,7 +59,9 @@ final class AuthController extends Controller
         $valid = password_verify($password, $hash) && $user !== null;
 
         if (!$valid) {
-            $limiter->hit($emailKey);
+            if ($limitEmail) {
+                $limiter->hit($emailKey);
+            }
             $limiter->hit($ipKey);
             $this->render('auth/login', [
                 'title' => 'Connexion', 'email' => $email, 'next' => $next,

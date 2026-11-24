@@ -31,9 +31,19 @@ final class ProfileController extends Controller
         ], $status);
     }
 
+    /** Les comptes de démo sont partagés : leur identité et leur mot de passe ne changent pas. */
+    private function refuseForDemo(array $user): void
+    {
+        if (Auth::isDemo($user)) {
+            Session::flash('info', 'Ce compte de démonstration est partagé par tous les visiteurs : son pseudo et son mot de passe ne peuvent pas être modifiés. Créez votre propre compte pour tester cette fonction.');
+            Response::redirect('/profil');
+        }
+    }
+
     public function updateUsername(): void
     {
         $user = $this->requireAuth();
+        $this->refuseForDemo($user);
         $username = Request::string('username', 60);
         $users = new User();
 
@@ -54,6 +64,7 @@ final class ProfileController extends Controller
     public function updatePassword(): void
     {
         $user = $this->requireAuth();
+        $this->refuseForDemo($user);
         $current = Request::password('current_password');
         $new = Request::password('new_password');
         $confirm = Request::password('new_password_confirm');

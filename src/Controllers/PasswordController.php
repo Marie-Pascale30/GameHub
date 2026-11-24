@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Core\Config;
 use App\Core\Controller;
 use App\Core\RateLimiter;
@@ -71,7 +72,9 @@ final class PasswordController extends Controller
         $resets = new PasswordReset();
         $reset = $resets->findValid($token);
 
-        if ($reset === null) {
+        // Les comptes de démo partagés ne changent jamais de mot de passe, même avec un jeton valide.
+        $owner = $reset !== null ? (new User())->find((int) $reset['user_id']) : null;
+        if ($reset === null || $owner === null || Auth::isDemo($owner)) {
             $this->render('auth/reset', ['title' => 'Nouveau mot de passe', 'token' => '', 'invalid' => true], 410);
             return;
         }
