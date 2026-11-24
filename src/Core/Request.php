@@ -105,17 +105,36 @@ final class Request
         return Config::get('trust_proxy') && ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
     }
 
+    /**
+     * IP du client, utilisée pour la limitation des tentatives (même logique que GoStage).
+     *
+     * Sans proxy (TRUST_PROXY=0, défaut) : REMOTE_ADDR uniquement.
+     *
+     * Derrière Render (TRUST_PROXY=1) : REMOTE_ADDR est l'adresse d'un proxy local, identique
+     * pour tous les visiteurs. Chaque proxy AJOUTE à droite de X-Forwarded-For l'adresse de son
+     * interlocuteur ; tout ce qui est à gauche peut avoir été inventé par le client. Relevé réel
+     * sur Render (nov. 2026), avec un client qui envoie lui-même « X-Forwarded-For: 1.2.3.4 » :
+     *
+     *     X-Forwarded-For: 1.2.3.4, <IP du client>, <IP Cloudflare>, <IP interne Render 10.x>
+     *
+     * Trois proxys de confiance : l'IP du client est la 3e entrée en partant de la droite
+     * (TRUSTED_PROXY_HOPS=3). L'ancienne version prenait la dernière entrée, qui est une IP
+     * interne de Render partagée par tous les visiteurs : la limite par IP était globale.
+     */
     public static function ip(): string
     {
-        if (Config::get('trust_proxy') && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            // Derrière le proxy de l'hébergeur : la dernière entrée est celle ajoutée par le proxy.
-            $parts = array_map('trim', explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']));
-            $ip = end($parts);
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                return $ip;
-            }
+        $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+        if (!Config::get('trust_proxy')) {
+            return $remote;
         }
-        return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+
+        $hops = max(1, (int) Config::get('trusted_proxy_hops'));
+        $parts = array_map('trim', explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '')));
+        if (count($parts) < $hops) {
+            return $remote; // la requête n'est pas passée par toute la chaîne de proxys attendue
+        }
+        $ip = $parts[count($parts) - $hops];
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : $remote;
     }
 
     public static function baseUrl(): string

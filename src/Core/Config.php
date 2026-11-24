@@ -43,6 +43,8 @@ final class Config
             'demo'        => filter_var($env('APP_DEMO', '1'), FILTER_VALIDATE_BOOLEAN),
             'url'         => rtrim($env('APP_URL', ''), '/'),
             'trust_proxy' => filter_var($env('TRUST_PROXY', '0'), FILTER_VALIDATE_BOOLEAN),
+            // Nombre de proxys de confiance devant l'application (Render : 3), voir Request::ip().
+            'trusted_proxy_hops' => (int) $env('TRUSTED_PROXY_HOPS', '3'),
             'db' => [
                 'driver' => $env('DB_DRIVER', 'sqlite'),
                 'path'   => $dbPath,

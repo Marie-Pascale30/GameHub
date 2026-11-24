@@ -38,6 +38,25 @@ docker run -p 8080:8080 gamehub
 Au premier démarrage, l'entrypoint crée la base SQLite, applique les migrations et charge les données de démo.
 Le port d'écoute suit la variable `PORT`, ce qui le rend compatible avec l'offre gratuite de Render.
 
+### Derrière un proxy (Render) : `TRUST_PROXY` et `TRUSTED_PROXY_HOPS`
+
+La limitation des tentatives se fait par IP. Derrière Render, `REMOTE_ADDR` est l'adresse d'un proxy interne, la même pour tous les visiteurs. Il faut donc lire `X-Forwarded-For`, mais **seulement les entrées ajoutées par les proxys de confiance** : chaque proxy ajoute une adresse **à droite**, et tout ce qui est à gauche peut avoir été inventé par le client.
+
+En-tête réellement reçu sur Render (relevé en novembre 2026, le client envoyant lui-même `X-Forwarded-For: 1.2.3.4`) :
+
+```
+X-Forwarded-For: 1.2.3.4, <IP du client>, <IP Cloudflare>, <IP interne Render 10.x>
+```
+
+Il y a trois proxys (Cloudflare, répartiteur de Render, proxy local) : l'IP du client est la **3e entrée en partant de la droite**. La dernière entrée seule (ce que faisait l'ancienne version) est une IP interne de Render : la limite par IP devenait globale. GoStage applique exactement la même règle.
+
+| Variable | Défaut | Rôle |
+|---|---|---|
+| `TRUST_PROXY` | `0` | `1` sur Render uniquement. À `0`, seule `REMOTE_ADDR` est utilisée. |
+| `TRUSTED_PROXY_HOPS` | `3` | Nombre de proxys de confiance devant l'application. S'il manque des entrées, on revient à `REMOTE_ADDR`. |
+
+Ne mettez jamais `TRUST_PROXY=1` sans proxy devant l'application : n'importe quel client pourrait alors choisir son IP.
+
 ### Sans Docker
 
 ```bash
