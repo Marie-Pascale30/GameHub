@@ -13,7 +13,7 @@
 
         <?php if (!empty($sent)): ?>
             <div class="alert alert--success" role="status"><?= icon('check') ?>
-                <span>Si un compte correspond à cette adresse, un lien de réinitialisation vient d’être envoyé.</span>
+                <span>Demande enregistrée. Cette démo n’envoie aucun e-mail : la réinitialisation par lien n’est pas disponible en ligne. Pour tester, utilisez les comptes de démo indiqués sur la page de connexion.</span>
             </div>
 
             <?php if (!empty($demoLink)): ?>

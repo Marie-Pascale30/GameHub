@@ -55,6 +55,12 @@ final class Config
         ];
     }
 
+    /** Comptes de démonstration partagés publiquement : identité et mot de passe non modifiables. */
+    public static function demoEmails(): array
+    {
+        return ['joueur@gamehub.fr', 'admin@gamehub.fr'];
+    }
+
     public static function get(string $key, mixed $default = null): mixed
     {
         $value = self::$values;

@@ -42,17 +42,11 @@ final class PasswordController extends Controller
             return;
         }
 
+        // SÉCURITÉ : aucun lien n'est affiché ni journalisé. L'ancien mode démo affichait le lien pour
+        // n'importe quelle adresse, ce qui permettait de prendre le contrôle de n'importe quel compte.
+        // Ce déploiement n'a pas de serveur SMTP : aucun jeton n'est donc émis (il ne pourrait pas être remis).
+        // Pour activer la fonction, brancher un envoi d'e-mail ici puis appeler PasswordReset::issue().
         $demoLink = null;
-        $user = (new User())->findByEmail($email);
-        if ($user) {
-            $token = (new PasswordReset())->issue((int) $user['id']);
-            $link = Request::baseUrl() . '/reinitialisation?token=' . $token;
-            // Pas de serveur SMTP : le lien est journalisé (logs du conteneur) et affiché en mode démo.
-            error_log('[GameHub][DÉMO] Lien de réinitialisation pour ' . $email . ' : ' . $link);
-            if (Config::get('demo')) {
-                $demoLink = $link;
-            }
-        }
 
         $this->render('auth/forgot', [
             'title'    => 'Mot de passe oublié',
