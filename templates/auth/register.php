@@ -7,6 +7,11 @@
             <p class="muted">Gratuit, et vos données restent les vôtres.</p>
         </div>
 
+        <div class="alert alert--demo signup-notice" role="note"><?= icon('info') ?>
+            <span><strong>Site de démonstration :</strong> n’utilisez pas de vraies données (prenez un pseudo et une adresse inventés). Tout est effacé à chaque redémarrage du serveur.
+                En créant un compte, vous acceptez le traitement décrit dans les <a href="/mentions-legales" target="_blank" rel="noopener">mentions légales &amp; confidentialité</a>. Vous pourrez supprimer votre compte depuis votre profil.</span>
+        </div>
+
         <?php if ($errors): ?>
             <div class="alert alert--error" role="alert"><?= icon('info') ?><span>Merci de corriger les champs signalés.</span></div>
         <?php endif; ?>

@@ -783,3 +783,24 @@ progress::-moz-progress-bar { background: var(--grad); border-radius: 99px; }
 .alert--demo { margin-top: 24px; border-color: rgba(251, 191, 36, .6); background: color-mix(in srgb, var(--amber) 10%, var(--surface)); }
 .alert--demo > .icon { color: var(--amber); }
 .section > .alert--demo:first-child { margin: 0 0 18px; }
+
+/* Bandeau démo, mentions légales, suppression de compte */
+.demo-banner { background: color-mix(in srgb, var(--amber) 14%, var(--surface)); border-bottom: 1px solid rgba(251, 191, 36, .45); color: var(--text, inherit); font-size: .82rem; padding: 7px 0; text-align: center; }
+.demo-banner strong { color: var(--amber); }
+.demo-banner a { color: inherit; font-weight: 600; text-decoration: underline; margin-left: 6px; }
+.footer__demo { margin-top: 8px; }
+.footer__demo a { text-decoration: underline; }
+.badge-demo { display: inline-block; padding: 1px 8px; margin-right: 6px; border-radius: 999px; background: color-mix(in srgb, var(--amber) 18%, transparent); color: var(--amber); font-weight: 700; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.signup-notice { margin: 0 0 18px; }
+.signup-notice a { text-decoration: underline; }
+.legal { max-width: 78ch; }
+.legal h2 { font-size: 1.15rem; margin: 26px 0 8px; }
+.legal h2:first-child { margin-top: 0; }
+.legal ul { padding-left: 1.2rem; }
+.legal li + li { margin-top: 6px; }
+.legal a { text-decoration: underline; }
+.danger-zone { margin-top: 24px; border-color: color-mix(in srgb, var(--danger) 45%, transparent); }
+.danger-zone .panel__title { color: var(--danger); }
+.danger-zone__form { max-width: 420px; }
+.btn--danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+.btn--danger:hover { background: color-mix(in srgb, var(--danger) 12%, transparent); }

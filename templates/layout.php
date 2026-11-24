@@ -27,6 +27,12 @@ $active = static fn (string $prefix): string => ($prefix === '/' ? $path === '/'
 </head>
 <body>
 <a class="skip-link" href="#contenu">Aller au contenu</a>
+<div class="demo-banner" role="note">
+    <div class="container">
+        <strong>Site de démonstration</strong> (portfolio) : données effacées à chaque redémarrage du serveur. N’y saisissez pas de vraies données.
+        <a href="/mentions-legales">En savoir plus</a>
+    </div>
+</div>
 
 <header class="topbar">
     <div class="container topbar__inner">
@@ -86,6 +92,7 @@ $active = static fn (string $prefix): string => ($prefix === '/' ? $path === '/'
     <div class="container footer__inner">
         <p><strong>GameHub v2</strong> — réécriture personnelle (2026) d’un projet de BTS SIO.</p>
         <p class="footer__muted">Jaquettes générées à partir du titre : aucune image protégée n’est utilisée. Les marques citées appartiennent à leurs propriétaires.</p>
+        <p class="footer__demo"><span class="badge-demo">Démo</span> Site de démonstration : données effacées à chaque redémarrage. <a href="/mentions-legales">Mentions légales &amp; confidentialité</a></p>
     </div>
 </footer>
 
