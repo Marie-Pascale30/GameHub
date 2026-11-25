@@ -4,7 +4,7 @@
         <div class="auth__head">
             <span class="auth__icon"><?= icon('key') ?></span>
             <h1>Mot de passe oublié</h1>
-            <p class="muted">Indiquez votre e-mail : nous vous enverrons un lien de réinitialisation valable <?= PasswordReset::TTL / 60 ?> minutes.</p>
+            <p class="muted">Cette démo n’envoie pas d’e-mail : la réinitialisation par lien n’est pas disponible en ligne. Utilisez les comptes de démo indiqués sur la page de connexion.</p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -15,14 +15,6 @@
             <div class="alert alert--success" role="status"><?= icon('check') ?>
                 <span>Demande enregistrée. Cette démo n’envoie aucun e-mail : la réinitialisation par lien n’est pas disponible en ligne. Pour tester, utilisez les comptes de démo indiqués sur la page de connexion.</span>
             </div>
-
-            <?php if (!empty($demoLink)): ?>
-                <div class="demo-box demo-box--warn" data-demo-reset>
-                    <p class="demo-box__title"><?= icon('info') ?> Mode démo — aucun e-mail n’est réellement envoyé</p>
-                    <p class="muted">Sur un vrai déploiement, ce lien partirait par e-mail. Il est aussi écrit dans les journaux du serveur. Jeton à usage unique, stocké haché en base.</p>
-                    <a class="demo-box__link" href="<?= e($demoLink) ?>" data-reset-link><?= e($demoLink) ?></a>
-                </div>
-            <?php endif; ?>
         <?php else: ?>
             <form method="post" action="/mot-de-passe-oublie" class="form" novalidate>
                 <?= csrf_field() ?>

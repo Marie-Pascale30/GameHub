@@ -47,13 +47,11 @@ final class PasswordController extends Controller
         // n'importe quelle adresse, ce qui permettait de prendre le contrôle de n'importe quel compte.
         // Ce déploiement n'a pas de serveur SMTP : aucun jeton n'est donc émis (il ne pourrait pas être remis).
         // Pour activer la fonction, brancher un envoi d'e-mail ici puis appeler PasswordReset::issue().
-        $demoLink = null;
 
         $this->render('auth/forgot', [
             'title'    => 'Mot de passe oublié',
             'email'    => '',
             'sent'     => true,
-            'demoLink' => $demoLink,
         ]);
     }
 
